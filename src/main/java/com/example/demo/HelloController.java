@@ -140,5 +140,95 @@ public class HelloController extends JdbcDaoSupport {
 				  }
 				  return students;
 		}
-	
+		@RequestMapping(value = "/user1", method = RequestMethod.GET)
+		public List<Hello> user1()
+		{
+				String query = "SELECT * FROM user ORDER BY ID LIMIT ? OFFSET ?";
+				List<Map<String, Object>> studentRow = getJdbcTemplate().queryForList(query,2,0);
+				  List<Hello> students = new ArrayList<Hello>();
+				  for(Map<String, Object> row:studentRow){
+					  Hello student = new Hello();
+					  student.setid((int)row.get("ID"));
+				   student.setemail((String)row.get("NAME"));
+				   student.setpassword((String)row.get("PASSWORD"));
+				   students.add(student);
+				  }
+				  return students;
+		}
+		@RequestMapping(value = "/user2", method = RequestMethod.GET)
+		public List<Hello> user2()
+		{
+			String query = "SELECT * FROM user ORDER BY ID LIMIT ? OFFSET ?";
+			List<Map<String, Object>> studentRow = getJdbcTemplate().queryForList(query,2,2);
+			  List<Hello> students = new ArrayList<Hello>();
+			  for(Map<String, Object> row:studentRow){
+				  Hello student = new Hello();
+				  student.setid((int)row.get("ID"));
+			   student.setemail((String)row.get("NAME"));
+			   student.setpassword((String)row.get("PASSWORD"));
+			   students.add(student);
+			  }
+			  return students;
+		}
+		@RequestMapping(value = "/totpage", method = RequestMethod.GET)
+		public List<Integer> pages()
+		{
+			String sql = "SELECT count(*) FROM user";
+			int count = getJdbcTemplate().queryForObject(
+                 sql, Integer.class);
+			double count1 =  Math.ceil((double)count/2.0);
+			List<Integer> pages = new ArrayList<Integer>();
+			for(int i=0;i<count1;i++)
+			{
+				pages.add(i);
+			}
+				  return pages;
+		}
+		
+		@RequestMapping(value = "/count", method = RequestMethod.GET)
+		public List<Double> counting()
+		{
+			String sql = "SELECT count(*) FROM user";
+			int count = getJdbcTemplate().queryForObject(
+                 sql, Integer.class);
+			double count1 =  Math.ceil((double)count/2.0);
+			List<Double> pages = new ArrayList<Double>();
+				pages.add(count1);
+				  return pages;
+		}
+		
+		@RequestMapping(value = "/pages/{pageno}", method = RequestMethod.GET)
+		public List<Hello> pages(@PathVariable("pageno") Integer pageno)
+		{
+			String query = "SELECT * FROM user ORDER BY ID LIMIT ? OFFSET ?";
+			List<Map<String, Object>> studentRow = getJdbcTemplate().queryForList(query,2,pageno);
+			  List<Hello> students = new ArrayList<Hello>();
+			  for(Map<String, Object> row:studentRow){
+				  Hello student = new Hello();
+				  student.setid((int)row.get("ID"));
+			   student.setemail((String)row.get("NAME"));
+			   student.setpassword((String)row.get("PASSWORD"));
+			   students.add(student);
+			  }
+			  return students;
+		}
+		
+		@RequestMapping(value = "/userdet/{myvar3}", method = RequestMethod.GET)
+		public List<Hello> checkpageuser(@PathVariable("myvar3") String myvar3)
+		{
+			String query = "SELECT * FROM user WHERE ID LIKE ? OR NAME LIKE ? OR PASSWORD LIKE ? ORDER BY ID LIMIT ?";
+			  List<Map<String, Object>> studentRow = getJdbcTemplate().queryForList(query,"%"+myvar3+"%","%"+myvar3+"%","%"+myvar3+"%",2);   
+			  List<Hello> students = new ArrayList<Hello>();
+			  for(Map<String, Object> row:studentRow){
+				  Hello student = new Hello();
+				  student.setid((int)row.get("ID"));
+			   student.setemail((String)row.get("NAME"));
+			   student.setpassword((String)row.get("PASSWORD"));
+			   students.add(student);
+			  }
+			   
+			  return students;
+	  
+		}
+		
 }

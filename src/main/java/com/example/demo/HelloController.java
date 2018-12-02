@@ -200,5 +200,21 @@ public class HelloController extends JdbcDaoSupport {
 			  return students;
 	  
 		}
+		
+		@RequestMapping(value = "/banks/{id}", method = RequestMethod.GET)
+		public List<Bank> banks(@PathVariable("id") Integer id)
+		{
+			String query = "SELECT SBANK,GBANK,CBANK FROM bank WHERE USERID LIKE ? ";
+			List<Map<String, Object>> studentRow = getJdbcTemplate().queryForList(query,id);
+			  List<Bank> students = new ArrayList<Bank>();
+			  for(Map<String, Object> row:studentRow){
+				  Bank student = new Bank();
+				  student.setid((String)row.get("SBANK"));
+			   student.setemail((String)row.get("GBANK"));
+			   student.setpassword((String)row.get("CBANK"));
+			   students.add(student);
+			  }
+			  return students;
+		}
 			
 }

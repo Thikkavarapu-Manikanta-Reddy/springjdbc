@@ -217,4 +217,23 @@ public class HelloController extends JdbcDaoSupport {
 			  return students;
 		}
 			
+		  @RequestMapping(value = "/checkdelete/{myvar}",method = RequestMethod.DELETE)
+		  public List<Hello> checkdelete(@PathVariable("myvar") Integer myvar){
+			  String query1 = "DELETE FROM user WHERE ID= ?";
+			  getJdbcTemplate().update(query1, myvar);
+			  String query2 = "SELECT * FROM user";
+			  List<Map<String, Object>> studentRow = getJdbcTemplate().queryForList(query2);
+			   
+			  List<Hello> students = new ArrayList<Hello>();
+			  for(Map<String, Object> row:studentRow){
+				  Hello student = new Hello();
+				  student.setid((int)row.get("ID"));
+			   student.setemail((String)row.get("NAME"));
+			   student.setpassword((String)row.get("PASSWORD"));
+			   students.add(student);
+			  }
+			  return students;
+
+		  }
+		
 }
